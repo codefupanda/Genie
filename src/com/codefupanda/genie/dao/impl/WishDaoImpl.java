@@ -18,8 +18,10 @@
 package com.codefupanda.genie.dao.impl;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -94,6 +96,23 @@ public class WishDaoImpl extends AbstractDao implements WishDao {
 
 	@Override
 	public void delete(int id) {
+	}
+
+	@Override
+	public Map<Category, List<Wish>> getCategoryWiseWishes() {
+		Map<Category, List<Wish>> categoryWiseWishes = new HashMap<Category, List<Wish>>();
+		
+		for(Wish wish: getAll()) {
+			// if the category list does not exists
+			if(!categoryWiseWishes.containsKey(wish.getCategory())) {
+				// add a new blank list
+				categoryWiseWishes.put(wish.getCategory(), new LinkedList<Wish>());
+			}
+			// add wish to the list
+			categoryWiseWishes.get(wish.getCategory()).add(wish);
+		}
+		
+		return categoryWiseWishes;
 	}
 
 }

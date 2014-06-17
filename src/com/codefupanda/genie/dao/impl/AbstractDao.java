@@ -26,15 +26,18 @@ import android.database.sqlite.SQLiteDatabase;
  */
 public abstract class AbstractDao {
 	
+	/** Select Query. */
+	protected static final String SELECT_STAR_FROM = "SELECT  * FROM ";
+	
 	protected SQLiteDatabase database;
-	protected BaseHelper baseDao;
+	protected SQLiteHelper baseDao;
 	
 	/**
 	 * Constructor.
 	 * @param context
 	 */
 	protected AbstractDao(Context context) {
-		baseDao = new BaseHelper(context);
+		baseDao = new SQLiteHelper(context);
 	}
 	
 	/**

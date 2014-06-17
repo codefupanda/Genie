@@ -5,28 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.codefupanda.genie.MainActivity"
+    android:textAppearance="?android:attr/textAppearanceLarge"
     tools:ignore="MergeRootFrame"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    style="@android:style/TextAppearance.Medium" >
 
+    <!-- Category -->
     <TextView
         android:id="@+id/category_text"
         android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/category_text" />
+        android:text="@string/category_text"
+        android:visibility="invisible" />
 
     <Spinner
         android:id="@+id/category"
         android:layout_margin="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:visibility="invisible" />
+    <!-- Category ENDS -->
     
+    <!-- Title -->
      <TextView
         android:id="@+id/title_text"
         android:layout_marginTop="10dp"
         android:text="@string/title_text"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:visibility="invisible" />
      
      <EditText
         android:id="@+id/title"
@@ -35,14 +43,18 @@
         android:ems="10"
         android:inputType="text"
         android:maxLines="1"
-        android:layout_margin="10dp" />
+        android:layout_margin="10dp"
+        android:visibility="invisible" />
+     <!-- Title ENDS -->
      
+     <!-- Description -->
      <TextView
         android:id="@+id/description_text"
         android:layout_marginTop="10dp"
         android:text="@string/description_text"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:visibility="invisible" />
      
      <EditText
         android:id="@+id/description"
@@ -51,28 +63,36 @@
         android:ems="10"
         android:inputType="text"
         android:maxLines="1"
-        android:layout_margin="10dp" />
+        android:layout_margin="10dp"
+        android:visibility="invisible" />
+     <!-- Description ENDS -->
      
+     <!-- End date -->
      <TextView
         android:id="@+id/end_date_text"
         android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/end_date_text" />
+        android:text="@string/end_date_text"
+        android:visibility="invisible" />
      
      <TextView
         android:id="@+id/end_date"
         android:layout_margin="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" 
-        android:text="@string/end_date_text" />
-
+        android:text="@string/end_date_text"
+        android:visibility="invisible" />
+	<!-- End date ENDS -->
+	
+	<!-- Wish Button -->
     <Button
         android:id="@+id/wishButton"
         android:text="@string/wish"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:visibility="invisible" />
 </LinearLayout>
 

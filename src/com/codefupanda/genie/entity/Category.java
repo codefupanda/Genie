@@ -41,14 +41,6 @@ public class Category {
 	}
 
 	/**
-	 * 
-	 * @param id
-	 */
-	public Category(int id) {
-		this.id = id;
-	}
-
-	/**
 	 * @return the id
 	 */
 	public int getId() {
@@ -89,5 +81,40 @@ public class Category {
 	public void setUserCreated(boolean userCreated) {
 		this.userCreated = userCreated;
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Category other = (Category) obj;
+		if (id != other.id)
+			return false;
+		return true;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Category [id=" + id + "]";
+	}
 }

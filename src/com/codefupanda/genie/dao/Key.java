@@ -18,17 +18,25 @@
 package com.codefupanda.genie.dao;
 
 /**
+ * List of database table keys ordered alphabetically.
+ *    
  * @author Shashank
  */
 public enum Key {
-	ID ("id"),
-	CATEGORY ("category"), 
-	TITLE ("title"),
+	CATEGORY ("category"),
 	DESCRIPTION ("description"),
-	END_DATE ("end_date");
+	END_DATE ("end_date"), 
+	ID ("id"),
+	NAME("name"),
+	TITLE ("title"),
+	USER_CREATED ("user_created");
 	
 	private String name;
 	
+	/**
+	 * Constructor.
+	 * @param name column name in DB
+	 */
 	Key(String name) {
 		this.name = name;
 	}

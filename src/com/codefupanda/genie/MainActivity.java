@@ -19,18 +19,29 @@ package com.codefupanda.genie;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
-import android.widget.TextView;
+import android.view.animation.AnimationUtils;
+import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
 
+import com.codefupanda.genie.adapter.ExpandableListAdapter;
+import com.codefupanda.genie.dao.CategoryDao;
 import com.codefupanda.genie.dao.WishDao;
+import com.codefupanda.genie.dao.impl.CategoryDaoImpl;
 import com.codefupanda.genie.dao.impl.WishDaoImpl;
+import com.codefupanda.genie.entity.Category;
 import com.codefupanda.genie.entity.Wish;
 
 /**
@@ -42,28 +53,69 @@ public class MainActivity extends ActionBarActivity {
 
 	private static final String TAG = "MainActivity";
 	private WishDao wishDao;
+	private CategoryDao categoryDao;
+	private ExpandableListAdapter expandableListAdapter;
+	private ExpandableListView expandableListView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		
+		categoryDao = new CategoryDaoImpl(getApplicationContext());
 		wishDao = new WishDaoImpl(getApplicationContext());
+		expandableListView = (ExpandableListView) findViewById(R.id.expandableCategories);
+		
+		SharedPreferences prefs = getSharedPreferences(
+				"com.codefupanda.genie", MODE_PRIVATE);
+
+		if (prefs.getBoolean("firstrun", true)) {
+			categoryDao.add(new Category(1, "Visit", false));
+			categoryDao.add(new Category(2, "Read", false));
+			categoryDao.add(new Category(3, "Hangout with", false));
+
+			prefs.edit().putBoolean("firstrun", false).commit();
+		}
+		expandableListView.setOnChildClickListener(new OnChildClickListener() {
+			
+			@Override
+			public boolean onChildClick(ExpandableListView parent, View v,
+					int groupPosition, int childPosition, long id) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+				builder.setMessage(
+						expandableListAdapter.getChild(groupPosition,
+								childPosition).getDescription())
+						.setCancelable(false)
+						.setPositiveButton("OK",
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog,
+											int id) {
+										dialog.cancel();
+									}
+								});
+				AlertDialog alert = builder.create();
+				alert.show();
+				return false;
+			}
+		});
 	}
 
-	
 	@Override
 	protected void onResume() {
-		TextView textView = (TextView) findViewById(R.id.textView1);
-		String text = "";
-		List<Wish> wishes = wishDao.getAll();
+		
+		Map<Category, List<Wish>> categoryWiseWishes = wishDao
+				.getCategoryWiseWishes();
+		expandableListAdapter = new ExpandableListAdapter(this,
+				categoryDao.getAll(), categoryWiseWishes);
 
-		for (Wish wish : wishes) {
-			text += wish;
-		}
-		textView.setText(text);
+		expandableListView.setAdapter(expandableListAdapter);
+		expandableListView.setGroupIndicator(null);
+		expandableListView.setVisibility(View.VISIBLE);
+		expandableListView.startAnimation(AnimationUtils.loadAnimation(this,
+                R.anim.slide_in_right));
 		super.onResume();
 	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu
@@ -76,13 +128,13 @@ public class MainActivity extends ActionBarActivity {
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
-		} else if(id == R.id.action_new) {
+		} else if (id == R.id.action_new) {
 			startActivity(new Intent(getApplicationContext(), AddActivity.class));
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	@Override
 	public boolean onMenuOpened(int featureId, Menu menu) {
 		if (featureId == Window.FEATURE_ACTION_BAR && menu != null) {

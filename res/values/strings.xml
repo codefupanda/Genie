@@ -9,5 +9,6 @@
     <string name="description_text">Description</string>
     <string name="end_date_text">Accomplish By</string>
     <string name="wish">Wish!</string>
+    <string name="categoryImage">Child exists</string>
 
 </resources>
