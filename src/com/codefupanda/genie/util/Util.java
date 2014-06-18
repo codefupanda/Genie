@@ -36,4 +36,8 @@ public class Util {
 
 	    return calendar.getTime();
 	}
+	
+	public static boolean isBlank(String text) {
+		return text == null || text.trim().length() == 0;
+	}
 }

@@ -47,6 +47,7 @@ import com.codefupanda.genie.dao.impl.WishDaoImpl;
 import com.codefupanda.genie.entity.Category;
 import com.codefupanda.genie.entity.Wish;
 import com.codefupanda.genie.util.AndroiUiUtil;
+import com.codefupanda.genie.util.Util;
 
 /**
  * 
@@ -56,7 +57,6 @@ import com.codefupanda.genie.util.AndroiUiUtil;
 public class AddActivity extends ActionBarActivity {
 
 	private static final String END_DATE_DIALOG = "END_DATE_DIALOG";
-	protected static final int DATE_DIALOG_ID = 0;
 	private WishDao wishDao;
 	private CategoryDao categoryDao;
 	private Calendar endDate;
@@ -69,6 +69,9 @@ public class AddActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		// customize action bar
+		AndroiUiUtil.customActionbar(getApplicationContext(), getSupportActionBar());
+		
 		setContentView(R.layout.activity_add);
 		getSupportActionBar().setHomeButtonEnabled(true);
 
@@ -91,18 +94,29 @@ public class AddActivity extends ActionBarActivity {
 
 			@Override
 			public void onClick(View view) {
+				String titleText = title.getText().toString();
+				String descriptionText = description.getText().toString();
+				
+				// Fields are mandatory
+				if (categories.getSelectedItemPosition() == 0
+						|| Util.isBlank(descriptionText)
+						|| Util.isBlank(titleText)) {
+					AndroiUiUtil.toast(getApplicationContext(), getResources()
+							.getString(R.string.fields_mendatory));
+					return ;
+				}
+				
 				Wish newWish = new Wish();
 				Category category = new Category();
-				// selected item position starts with 0
-				// whereas DB index starts with 1
-				category.setId(categories.getSelectedItemPosition() + 1);
+				category.setId(categories.getSelectedItemPosition());
 				newWish.setCategory(category);
-				newWish.setTitle(title.getText().toString());
-				newWish.setDescription(description.getText().toString());
+				newWish.setTitle(titleText);
+				newWish.setDescription(descriptionText);
 				newWish.setEndDate(endDate.getTime());
 				wishDao.add(newWish);
 				AndroiUiUtil
-						.toast(getApplicationContext(), "Added a new entry");
+						.toast(getApplicationContext(), getResources()
+								.getString(R.string.add_wish_success));
 				finish();
 			}
 		});
@@ -111,23 +125,15 @@ public class AddActivity extends ActionBarActivity {
                 R.anim.slide_in_buttom);
 	}
 
-	@Override
-	protected void onResume() {
-		TextView titleTextView = (TextView) findViewById(R.id.category_text);
-		titleTextView.setVisibility(View.VISIBLE);
-		titleTextView.startAnimation(slideUp);
-		categories.setVisibility(View.VISIBLE);
-		categories.startAnimation(slideUp);
-		super.onResume();
-	}
-	
 	private void populateCategories(final Spinner categories) {
-		List<String> list = categoryDao.getAllNames();
+		final List<String> list = categoryDao.getAllNames();
 
 		// A Unknown Android bug
 		// onItemSelected is called when it is not meant to
-		// Setting a blank select option
+		// setting a blank select option
+		// and rejecting the value if blank is selected
 		list.add(0, "");
+		list.add(list.size(), getResources().getString(R.string.add_new_category));
 		
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, list);
@@ -138,12 +144,55 @@ public class AddActivity extends ActionBarActivity {
 		categories.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1,
+			public void onItemSelected(AdapterView<?> arg0, View view,
 					int position, long arg3) {
 				// A unknown issue!
 				if(position == 0) {
 					return;
 				}
+				
+				// New category selected
+				if(position == list.size() - 1) {
+					final Dialog dialog = new Dialog(AddActivity.this);
+					View newCategoryView = getLayoutInflater().inflate(R.layout.new_category_dialog, null);
+					dialog.setContentView(newCategoryView);
+					
+					Button cancel = (Button) newCategoryView
+							.findViewById(R.id.cancel);
+					cancel.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View view) {
+							dialog.dismiss();
+						}
+					});
+					
+					final EditText categoryEditText = (EditText) newCategoryView.findViewById(R.id.categoryName);
+					
+					Button create = (Button) newCategoryView
+							.findViewById(R.id.create);
+					create.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							String categoryName = categoryEditText.getText()
+									.toString();
+							if(!Util.isBlank(categoryName)) {
+								Category category = new Category();
+								category.setName(categoryName);
+								categoryDao.add(category);
+								populateCategories(categories);
+								AndroiUiUtil.toast(getBaseContext(),
+										R.string.create_category_successful);
+								dialog.dismiss();
+							}
+							
+						}
+					});
+					dialog.setTitle(getResources().getString(
+							R.string.action_new));
+					dialog.show();
+					return ;
+				}
+				
 				// Slide up the title
 				TextView textView = (TextView) findViewById(R.id.title_text);
 				makeVisibleWithAnimation(textView);
@@ -171,7 +220,6 @@ public class AddActivity extends ActionBarActivity {
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
-				//TODO: DO NOTHING?!
 			}
 			
 		});

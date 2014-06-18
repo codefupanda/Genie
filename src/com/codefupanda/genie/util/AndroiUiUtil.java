@@ -18,7 +18,11 @@
 package com.codefupanda.genie.util;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.support.v7.app.ActionBar;
 import android.widget.Toast;
+
+import com.codefupanda.genie.R;
 
 /**
  * @author Shashank
@@ -26,8 +30,34 @@ import android.widget.Toast;
  */
 public class AndroiUiUtil {
 
+	/**
+	 * Toast info.
+	 * 
+	 * @param applicationContext context
+	 * @param message the message to toast
+	 */
 	public static void toast(Context applicationContext, String message) {
 		Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show();
+	}
+
+	/**
+	 * Create method with String resource ID.
+	 * 
+	 * @param baseContext
+	 * @param createCategorySuccessful
+	 */
+	public static void toast(Context context, int createCategorySuccessful) {
+		toast(context, context.getResources().getString(createCategorySuccessful));
+	}
+
+	/**
+	 * Common code for customizing the action bar.
+	 * 
+	 * @param context context
+	 * @param supportActionBar actionBar
+	 */
+	public static void customActionbar(Context context, ActionBar supportActionBar) {
+		supportActionBar.setBackgroundDrawable(new ColorDrawable(context.getResources().getColor(R.color.white_opaque)));
 	}
 
 }

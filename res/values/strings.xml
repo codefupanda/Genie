@@ -9,6 +9,10 @@
     <string name="description_text">Description</string>
     <string name="end_date_text">Accomplish By</string>
     <string name="wish">Wish!</string>
-    <string name="categoryImage">Child exists</string>
+    <string name="fields_mendatory">All fields are mandatory</string>
+    <string name="add_wish_success">Added a new Wish!</string>
+    <string name="add_new_category">New Category</string>
+    <string name="create">Create</string>
+    <string name="create_category_successful">Created category</string>
 
 </resources>

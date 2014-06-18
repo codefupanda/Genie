@@ -2,6 +2,7 @@ package com.codefupanda.genie.dao.impl;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -26,7 +27,7 @@ public class CategoryDaoImpl extends AbstractDao implements CategoryDao {
 	public void add(Category category) {
 		open();
 		ContentValues values = new ContentValues();
-		values.put(Key.NAME.toString(), category.getName());
+		values.put(Key.NAME.toString(), category.getName().toUpperCase(Locale.US));
 		values.put(Key.USER_CREATED.toString(), category.isUserCreated());
 		
 		// Inserting Row

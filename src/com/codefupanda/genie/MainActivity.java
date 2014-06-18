@@ -17,24 +17,23 @@
 
 package com.codefupanda.genie;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
+import android.view.View.OnClickListener;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.TextView;
 
 import com.codefupanda.genie.adapter.ExpandableListAdapter;
 import com.codefupanda.genie.dao.CategoryDao;
@@ -43,6 +42,7 @@ import com.codefupanda.genie.dao.impl.CategoryDaoImpl;
 import com.codefupanda.genie.dao.impl.WishDaoImpl;
 import com.codefupanda.genie.entity.Category;
 import com.codefupanda.genie.entity.Wish;
+import com.codefupanda.genie.util.AndroiUiUtil;
 
 /**
  * The main activity.
@@ -51,7 +51,6 @@ import com.codefupanda.genie.entity.Wish;
  */
 public class MainActivity extends ActionBarActivity {
 
-	private static final String TAG = "MainActivity";
 	private WishDao wishDao;
 	private CategoryDao categoryDao;
 	private ExpandableListAdapter expandableListAdapter;
@@ -60,8 +59,9 @@ public class MainActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
 		
+		AndroiUiUtil.customActionbar(getApplicationContext(), getSupportActionBar());
+		setContentView(R.layout.activity_main);
 		categoryDao = new CategoryDaoImpl(getApplicationContext());
 		wishDao = new WishDaoImpl(getApplicationContext());
 		expandableListView = (ExpandableListView) findViewById(R.id.expandableCategories);
@@ -81,20 +81,25 @@ public class MainActivity extends ActionBarActivity {
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v,
 					int groupPosition, int childPosition, long id) {
-				AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-				builder.setMessage(
-						expandableListAdapter.getChild(groupPosition,
-								childPosition).getDescription())
-						.setCancelable(false)
-						.setPositiveButton("OK",
-								new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog,
-											int id) {
-										dialog.cancel();
-									}
-								});
-				AlertDialog alert = builder.create();
-				alert.show();
+				final Dialog dialog = new Dialog(MainActivity.this);
+				View view = getLayoutInflater().inflate(R.layout.description_view_dialog, null);
+				dialog.setContentView(view);
+				
+				Wish wish = expandableListAdapter.getChild(groupPosition,
+						childPosition);
+				dialog.setTitle(wish.getTitle());
+				
+				TextView description = (TextView) view.findViewById(R.id.description);
+				description.setText(wish.getDescription());
+				
+				Button okButton = (Button) view.findViewById(R.id.ok);
+				okButton.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						dialog.dismiss();
+					}
+				});
+				dialog.show();
 				return false;
 			}
 		});
@@ -133,24 +138,5 @@ public class MainActivity extends ActionBarActivity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
-	}
-
-	@Override
-	public boolean onMenuOpened(int featureId, Menu menu) {
-		if (featureId == Window.FEATURE_ACTION_BAR && menu != null) {
-			if (menu.getClass().getSimpleName().equals("MenuBuilder")) {
-				try {
-					Method m = menu.getClass().getDeclaredMethod(
-							"setOptionalIconsVisible", Boolean.TYPE);
-					m.setAccessible(true);
-					m.invoke(menu, true);
-				} catch (NoSuchMethodException e) {
-					Log.e(TAG, "onMenuOpened", e);
-				} catch (Exception e) {
-					throw new RuntimeException(e);
-				}
-			}
-		}
-		return super.onMenuOpened(featureId, menu);
 	}
 }
