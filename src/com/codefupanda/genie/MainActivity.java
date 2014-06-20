@@ -19,23 +19,25 @@ package com.codefupanda.genie;
 
 import java.util.List;
 import java.util.Map;
-
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.TextView;
-
 import com.codefupanda.genie.adapter.ExpandableListAdapter;
+import com.codefupanda.genie.constant.Constants;
 import com.codefupanda.genie.dao.CategoryDao;
 import com.codefupanda.genie.dao.WishDao;
 import com.codefupanda.genie.dao.impl.CategoryDaoImpl;
@@ -56,9 +58,12 @@ public class MainActivity extends ActionBarActivity {
 	private ExpandableListAdapter expandableListAdapter;
 	private ExpandableListView expandableListView;
 
+	@SuppressLint("InlinedApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		supportRequestWindowFeature(Window.FEATURE_ACTION_BAR);
+		getSupportActionBar().hide();
 		
 		AndroiUiUtil.customActionbar(getApplicationContext(), getSupportActionBar());
 		setContentView(R.layout.activity_main);
@@ -105,20 +110,42 @@ public class MainActivity extends ActionBarActivity {
 		});
 	}
 
+	/**
+	 * 
+	 * 
+	 * Flash is disabled when main activity is called after the welcome screen.
+	 */
 	@Override
 	protected void onResume() {
+		Bundle extras = getIntent().getExtras();
 		
+		if(extras != null && !extras.getBoolean(Constants.SHOW_FLASH)) {
+			showHomeScreen();
+		} else
+			new Handler().postDelayed(new Runnable() {
+				public void run() {
+					View logo = findViewById(R.id.logo);
+					logo.setVisibility(View.INVISIBLE);
+					getSupportActionBar().show();
+					showHomeScreen();
+				}
+			}, Constants.WELCOME_SCREEN_LENGTH);
+		super.onResume();
+	}
+
+	private void showHomeScreen() {
 		Map<Category, List<Wish>> categoryWiseWishes = wishDao
 				.getCategoryWiseWishes();
 		expandableListAdapter = new ExpandableListAdapter(this,
 				categoryDao.getAll(), categoryWiseWishes);
-
 		expandableListView.setAdapter(expandableListAdapter);
 		expandableListView.setGroupIndicator(null);
 		expandableListView.setVisibility(View.VISIBLE);
 		expandableListView.startAnimation(AnimationUtils.loadAnimation(this,
-                R.anim.slide_in_right));
-		super.onResume();
+				R.anim.slide_in_right));
+		for (int i = 0; i < categoryWiseWishes.keySet().size(); i++) {
+			expandableListView.expandGroup(i);
+		}
 	}
 
 	@Override

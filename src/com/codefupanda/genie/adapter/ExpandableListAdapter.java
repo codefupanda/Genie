@@ -107,16 +107,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 .findViewById(R.id.category_text_view);
         categoryTextView.setTypeface(null, Typeface.BOLD);
         categoryTextView.setText(category.getName());
-//        if(getChildrenCount(groupPosition) > 0) {
-//        	categoryTextView.setCompoundDrawablesWithIntrinsicBounds(
-//        			  0, //left
-//        			  0, //top
-//        			  R.drawable.category_image, //right
-//        			  0);
-//        }
+        TextView wishCount = (TextView) convertView.findViewById(R.id.wishCount);
+		wishCount.setText("(" + getChildrenCount(groupPosition) + ")");
         return convertView;
     }
- 
+
     @Override
     public boolean hasStableIds() {
         return false;

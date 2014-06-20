@@ -20,6 +20,7 @@ package com.codefupanda.genie.util;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.ActionBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codefupanda.genie.R;
@@ -33,11 +34,15 @@ public class AndroiUiUtil {
 	/**
 	 * Toast info.
 	 * 
-	 * @param applicationContext context
+	 * @param context context
 	 * @param message the message to toast
 	 */
-	public static void toast(Context applicationContext, String message) {
-		Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show();
+	public static void toast(Context context, String message) {
+		Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+		toast.getView().setBackgroundColor(context.getResources().getColor(R.color.white_opaque));
+		TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+		v.setTextColor(context.getResources().getColor(R.color.blue));
+		toast.show();
 	}
 
 	/**

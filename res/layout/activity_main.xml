@@ -1,11 +1,20 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
+    style="@android:style/TextAppearance.Medium"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.codefupanda.genie.MainActivity"
-    tools:ignore="MergeRootFrame"
-    style="@android:style/TextAppearance.Medium" >
+    tools:ignore="MergeRootFrame" >
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/ic_launcher" />
 
     <ExpandableListView
         android:id="@+id/expandableCategories"
@@ -14,5 +23,4 @@
         android:groupIndicator="@android:color/transparent"
         android:visibility="invisible" />
 
-</FrameLayout>
-
+</RelativeLayout>

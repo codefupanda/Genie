@@ -2,7 +2,7 @@
     
     <!-- Colors -->
 	<color name="white_opaque">#FFFFFFFF</color>
-	<color name="blue">#3399FF</color>
+	<color name="blue">#0099CC</color>
 	
     <!--
         Base application theme, dependent on API level. This theme is replaced
@@ -17,8 +17,13 @@
         <item name="android:background">@color/white_opaque</item>
         <item name="android:spinnerItemStyle">@style/AppSpinnerItem</item>
         <item name="android:buttonStyle">@style/AppButton</item>
+        <item name="android:textAppearance">@style/AppTextSize</item>
     </style>
     
+    <style name="AppTextSize" parent="@android:style/TextAppearance.Medium">
+    	<item name="android:textSize">20sp</item>
+	</style>
+	
     <style name="AppSpinnerItem" parent="@style/Widget.AppCompat.Light.DropDownItem.Spinner">
         <item name="android:background">@color/white_opaque</item>
         <item name="android:padding">0dp</item>

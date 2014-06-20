@@ -1,6 +1,12 @@
 <set xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shareInterpolator="false" >
+    android:interpolator="@android:anim/linear_interpolator"
+    android:shareInterpolator="true" >
 
+    <alpha
+        android:fromAlpha="1.0"
+        android:repeatCount="1"
+        android:startOffset="0"
+        android:toAlpha="0.1" />
     <translate
         android:duration="750"
         android:fromXDelta="100%"
