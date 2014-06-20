@@ -1,20 +1,6 @@
 /*
- * Copyright (C) Shashank Kulkarni - Shashank.physics AT gmail DOT com
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
+ * See the file "LICENSE" for the full license governing this code.
  */
-
 package com.codefupanda.genie.util;
 
 import android.content.Context;
@@ -41,6 +27,7 @@ public class AndroiUiUtil {
 		Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
 		toast.getView().setBackgroundColor(context.getResources().getColor(R.color.white_opaque));
 		TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+		v.setShadowLayer(0, 0, 0, R.color.white_opaque);
 		v.setTextColor(context.getResources().getColor(R.color.blue));
 		toast.show();
 	}

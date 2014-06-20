@@ -1,24 +1,11 @@
-/*
- * Copyright (C) Shashank Kulkarni - Shashank.physics AT gmail DOT com
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
+/* 
+ * See the file "LICENSE" for the full license governing this code.
  */
-
 package com.codefupanda.genie;
 
 import java.util.List;
 import java.util.Map;
+
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
@@ -36,6 +23,7 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.TextView;
+
 import com.codefupanda.genie.adapter.ExpandableListAdapter;
 import com.codefupanda.genie.constant.Constants;
 import com.codefupanda.genie.dao.CategoryDao;
@@ -75,11 +63,15 @@ public class MainActivity extends ActionBarActivity {
 				"com.codefupanda.genie", MODE_PRIVATE);
 
 		if (prefs.getBoolean("firstrun", true)) {
-			categoryDao.add(new Category(1, "Visit", false));
-			categoryDao.add(new Category(2, "Read", false));
-			categoryDao.add(new Category(3, "Hangout with", false));
-
+			categoryDao.add(new Category(1, "Visit", "Where", false));
+			categoryDao.add(new Category(2, "Read", "What", false));
+			categoryDao.add(new Category(3, "Hangout", "With", false));
+			categoryDao.add(new Category(4, "Travel", "To", false));
+			
+			Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
+			startActivity(intent);
 			prefs.edit().putBoolean("firstrun", false).commit();
+            finish();
 		}
 		expandableListView.setOnChildClickListener(new OnChildClickListener() {
 			
@@ -136,14 +128,15 @@ public class MainActivity extends ActionBarActivity {
 	private void showHomeScreen() {
 		Map<Category, List<Wish>> categoryWiseWishes = wishDao
 				.getCategoryWiseWishes();
+		List<Category> categories = categoryDao.getAll();
 		expandableListAdapter = new ExpandableListAdapter(this,
-				categoryDao.getAll(), categoryWiseWishes);
+				categories, categoryWiseWishes);
 		expandableListView.setAdapter(expandableListAdapter);
 		expandableListView.setGroupIndicator(null);
 		expandableListView.setVisibility(View.VISIBLE);
 		expandableListView.startAnimation(AnimationUtils.loadAnimation(this,
 				R.anim.slide_in_right));
-		for (int i = 0; i < categoryWiseWishes.keySet().size(); i++) {
+		for (int i = 0; i < categories.size(); i++) {
 			expandableListView.expandGroup(i);
 		}
 	}
@@ -157,13 +150,22 @@ public class MainActivity extends ActionBarActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		} else if (id == R.id.action_new) {
-			startActivity(new Intent(getApplicationContext(), AddActivity.class));
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
+		switch (item.getItemId()) {
+			case R.id.action_new:
+				startActivity(new Intent(getApplicationContext(), AddActivity.class));
+				return true;
+			// open settings activity
+				/*
+	        case R.id.action_settings:
+	        	startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+	            return true;
+	           	*/
+	         // open help activity
+	        case R.id.action_help:
+	        	startActivity(new Intent(getApplicationContext(), HelpActivity.class));
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
 	}
 }

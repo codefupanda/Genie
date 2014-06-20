@@ -1,18 +1,5 @@
-/*
- * Copyright (C) Shashank Kulkarni - Shashank.physics AT gmail DOT com
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
+/* 
+ * See the file "LICENSE" for the full license governing this code.
  */
 
 package com.codefupanda.genie.dao.impl;
@@ -77,7 +64,8 @@ public class WishDaoImpl extends AbstractDao implements WishDao {
 			do {
 				Wish wish = new Wish();
 				wish.setId(Integer.parseInt(cursor.getString(0)));
-				wish.setCategory(new Category(Integer.parseInt(cursor.getString(1)), "Category name", false));
+				//TODO: QUERY REMAINING DETAILS
+				wish.setCategory(new Category(Integer.parseInt(cursor.getString(1)), null, null, false));
 				wish.setTitle(cursor.getString(2));
 				wish.setDescription(cursor.getString(3));
 				Calendar calendar = Calendar.getInstance();

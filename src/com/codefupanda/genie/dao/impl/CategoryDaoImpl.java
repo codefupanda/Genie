@@ -1,3 +1,6 @@
+/*
+ * See the file "LICENSE" for the full license governing this code.
+ */
 package com.codefupanda.genie.dao.impl;
 
 import java.util.LinkedList;
@@ -28,6 +31,7 @@ public class CategoryDaoImpl extends AbstractDao implements CategoryDao {
 		open();
 		ContentValues values = new ContentValues();
 		values.put(Key.NAME.toString(), category.getName().toUpperCase(Locale.US));
+		values.put(Key.WT_WORD.toString(), category.getWhWord());
 		values.put(Key.USER_CREATED.toString(), category.isUserCreated());
 		
 		// Inserting Row
@@ -37,16 +41,31 @@ public class CategoryDaoImpl extends AbstractDao implements CategoryDao {
 
 	@Override
 	public Category get(int id) {
+		String query = SELECT_STAR_FROM + Table.CATEGORY + WHERE_ID + String.valueOf(id);
+		List<Category> categories = queryForCategories(query);
+		if(categories.size() != 0) {
+			return categories.get(0);
+		}
 		return null;
 	}
 
 	@Override
 	public List<Category> getAll() {
-		List<Category> categories = new LinkedList<Category>();
 		String selectQuery = SELECT_STAR_FROM + Table.CATEGORY;
+		List<Category> categories = queryForCategories(selectQuery);
+		return categories;
+	}
 
+	/**
+	 * Takes query and retrieves categories.
+	 * 
+	 * @param query
+	 * @return list of categories
+	 */
+	private List<Category> queryForCategories(String query) {
+		List<Category> categories = new LinkedList<Category>();
 		open();
-		Cursor cursor = database.rawQuery(selectQuery, null);
+		Cursor cursor = database.rawQuery(query, null);
 		
 		// looping through all rows and adding to list
 		if (cursor.moveToFirst()) {
@@ -54,7 +73,8 @@ public class CategoryDaoImpl extends AbstractDao implements CategoryDao {
 				Category category = new Category();
 				category.setId(Integer.parseInt(cursor.getString(0)));
 				category.setName(cursor.getString(1));
-				int userCreated = Integer.parseInt(cursor.getString(2));
+				category.setWhWord(cursor.getString(2));
+				int userCreated = Integer.parseInt(cursor.getString(3));
 				category.setUserCreated(userCreated == 0? false: true);
 				categories.add(category);
 			} while (cursor.moveToNext());

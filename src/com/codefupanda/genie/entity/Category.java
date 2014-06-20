@@ -1,20 +1,6 @@
 /*
- * Copyright (C) Shashank Kulkarni - Shashank.physics AT gmail DOT com
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
+ * See the file "LICENSE" for the full license governing this code.
  */
-
 package com.codefupanda.genie.entity;
 
 /**
@@ -24,6 +10,7 @@ package com.codefupanda.genie.entity;
 public class Category {
 	private int id;
 	private String name;
+	private String whWord;
 	private boolean userCreated;
 	
 	public Category() {
@@ -34,9 +21,10 @@ public class Category {
 	 * @param name
 	 * @param userCreated
 	 */
-	public Category(int id, String name, boolean userCreated) {
+	public Category(int id, String name, String whWord, boolean userCreated) {
 		this.id = id;
 		this.name = name;
+		this.whWord = whWord;
 		this.userCreated = userCreated;
 	}
 
@@ -66,6 +54,20 @@ public class Category {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	/**
+	 * @return the whWord
+	 */
+	public String getWhWord() {
+		return whWord;
+	}
+
+	/**
+	 * @param whWord the whWord to set
+	 */
+	public void setWhWord(String whWord) {
+		this.whWord = whWord;
 	}
 
 	/**

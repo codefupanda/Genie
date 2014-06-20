@@ -6,6 +6,7 @@
     <string name="action_new">New</string>
     <string name="category_text">I Wish To </string>
     <string name="title_text">Where</string>
+    <string name="whWord_hint">"Where" or "To" or "With"</string>
     <string name="description_text">Description</string>
     <string name="end_date_text">Accomplish By</string>
     <string name="wish">Wish!</string>
@@ -14,5 +15,21 @@
     <string name="add_new_category">New Category</string>
     <string name="create">Create</string>
     <string name="create_category_successful">Created category</string>
+    <string name="welcome">Welcome to Genie!</string>
+    <string name="what_can_i_do_for_you">Hukum Mere Aaka!</string>
+    <string name="genie_intro">
+        Genie records all are wishes.\n
+        \tWishes do come true!</string>
+    <string name="action_help">Help</string>
+    <string name="helpText"><![CDATA[
+        The first step in realizing your dreams is to record them.<br/>
+        <b>Genie</b> helps you record your wishes!<br/>
+        <br/>
+        Genie let\'s you categories your wishes.<br/>
+        Either select from the defualt categories or create your own category.<br/>
+        <br/>
+        Make a <b>Wish</b>!<br/>
+        <br/>]]>  
+    </string>
 
 </resources>

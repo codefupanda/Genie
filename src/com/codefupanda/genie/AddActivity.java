@@ -1,18 +1,5 @@
-/*
- * Copyright (C) Shashank Kulkarni - Shashank.physics AT gmail DOT com
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
+/* 
+ * See the file "LICENSE" for the full license governing this code.
  */
 
 package com.codefupanda.genie;
@@ -133,6 +120,8 @@ public class AddActivity extends ActionBarActivity {
 		// setting a blank select option
 		// and rejecting the value if blank is selected
 		list.add(0, "");
+		
+		// Option to add a new category
 		list.add(list.size(), getResources().getString(R.string.add_new_category));
 		
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
@@ -167,6 +156,7 @@ public class AddActivity extends ActionBarActivity {
 					});
 					
 					final EditText categoryEditText = (EditText) newCategoryView.findViewById(R.id.categoryName);
+					final EditText whWordEditText = (EditText) newCategoryView.findViewById(R.id.whWord);
 					
 					Button create = (Button) newCategoryView
 							.findViewById(R.id.create);
@@ -175,9 +165,13 @@ public class AddActivity extends ActionBarActivity {
 						public void onClick(View v) {
 							String categoryName = categoryEditText.getText()
 									.toString();
-							if(!Util.isBlank(categoryName)) {
+							String whWord = whWordEditText.getText()
+									.toString();
+							if(!Util.isBlank(categoryName)
+									&& !Util.isBlank(whWord)) {
 								Category category = new Category();
 								category.setName(categoryName);
+								category.setWhWord(whWord);
 								categoryDao.add(category);
 								populateCategories(categories);
 								AndroiUiUtil.toast(getBaseContext(),
@@ -193,8 +187,14 @@ public class AddActivity extends ActionBarActivity {
 					return ;
 				}
 				
-				// Slide up the title
 				TextView textView = (TextView) findViewById(R.id.title_text);
+				Category category = categoryDao.get(categories.getSelectedItemPosition());
+				// Though not expecting a null here!
+				if(category != null) {
+					textView.setText(category.getWhWord());
+				}
+				
+				// Slide up the title
 				makeVisibleWithAnimation(textView);
 				makeVisibleWithAnimation(title);
 				
