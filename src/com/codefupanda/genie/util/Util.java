@@ -26,4 +26,10 @@ public class Util {
 	public static boolean isBlank(String text) {
 		return text == null || text.trim().length() == 0;
 	}
+
+	public static CharSequence getDateString(int day, int month, int year) {
+		return new StringBuilder().append(month + 1)
+		.append("-").append(day).append("-").append(year)
+		.append(" ");
+	}
 }

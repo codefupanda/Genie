@@ -322,9 +322,7 @@ public class AddActivity extends ActionBarActivity {
 			endDate.set(Calendar.MONTH, month);
 			endDate.set(Calendar.DAY_OF_MONTH, day);
 			TextView endDateView = (TextView) findViewById(R.id.end_date);
-			endDateView.setText(new StringBuilder().append(month + 1)
-					.append("-").append(day).append("-").append(year)
-					.append(" "));
+			endDateView.setText(Util.getDateString(day, month, year));
 		}
 	}
 }

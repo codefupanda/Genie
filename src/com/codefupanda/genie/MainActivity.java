@@ -3,6 +3,7 @@
  */
 package com.codefupanda.genie;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +37,7 @@ import com.codefupanda.genie.entity.Category;
 import com.codefupanda.genie.entity.Wish;
 import com.codefupanda.genie.listener.OnSwipeTouchListener;
 import com.codefupanda.genie.util.AndroiUiUtil;
+import com.codefupanda.genie.util.Util;
 
 /**
  * The main activity.
@@ -71,8 +73,10 @@ public class MainActivity extends ActionBarActivity {
 		if (prefs.getBoolean("firstrun", true)) {
 			categoryDao.add(new Category(1, "Visit", "Where", false));
 			categoryDao.add(new Category(2, "Read", "What", false));
-			categoryDao.add(new Category(3, "Hangout", "With", false));
 			categoryDao.add(new Category(4, "Travel", "To", false));
+			categoryDao.add(new Category(5, "Buy", "What", false));
+			categoryDao.add(new Category(3, "Hangout", "With", false));
+			categoryDao.add(new Category(5, "Do", "What", false));
 			
 			Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
 			startActivity(intent);
@@ -97,18 +101,44 @@ public class MainActivity extends ActionBarActivity {
 							.getChildAt(pos);
 					TextView textView = (TextView) ll.findViewById(R.id.wishId);
 					if (textView != null) {
-						deleteWish(Integer.parseInt(textView.getText()
+						areYouSure(Integer.parseInt(textView.getText()
 								.toString()));
 					}
 				}
 				super.onSwipeRight(view, e1);
 			}
 
-			private void deleteWish(int wishId) {
+			private void areYouSure(final int wishId) {
+				final Dialog dialog = new Dialog(MainActivity.this);
+				View view = getLayoutInflater().inflate(R.layout.wish_delete_dialog, null);
+				dialog.setContentView(view);
+				
+				Button okButton = (Button) view.findViewById(R.id.ok);
+				okButton.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						deleteWish(wishId);
+						dialog.dismiss();
+					}
+				});
+				
+				Button cancelButton = (Button) view.findViewById(R.id.cancel);
+				cancelButton.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						dialog.dismiss();
+					}
+				});
+				
+				dialog.show();
+			}
+			
+			private void deleteWish(final int wishId) {
 				wishDao.delete(wishId);
 				expandableListAdapter.setCategoryWiseWishes(wishDao
 						.getCategoryWiseWishes());
-				expandableListAdapter.notifyDataSetChanged();
+				expandableListAdapter
+						.notifyDataSetChanged();
 				AndroiUiUtil.toast(MainActivity.this,
 						R.string.delete_wish_success);
 			}
@@ -135,6 +165,15 @@ public class MainActivity extends ActionBarActivity {
 				
 				TextView description = (TextView) view.findViewById(R.id.description);
 				description.setText(wish.getDescription());
+				
+				
+				Calendar endDate = Calendar.getInstance();
+				endDate.setTime(wish.getEndDate());
+				int year = endDate.get(Calendar.YEAR);
+				int month = endDate.get(Calendar.MONTH);
+				int day = endDate.get(Calendar.DAY_OF_MONTH);
+				TextView endDateView = (TextView) view.findViewById(R.id.end_date);
+				endDateView.setText(Util.getDateString(day, month, year));
 				
 				Button okButton = (Button) view.findViewById(R.id.ok);
 				okButton.setOnClickListener(new OnClickListener() {
