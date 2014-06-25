@@ -4,12 +4,13 @@
 package com.codefupanda.genie.dao;
 
 /**
+ * List of database tables ordered alphabetically.
+ * 
  * @author Shashank
- *
  */
 public enum Table {
 	CATEGORY ("category"),
-	WISHES ("WISHES");
+	WISHES ("wish");
 	
 	private final String name;
 	

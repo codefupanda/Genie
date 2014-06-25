@@ -34,13 +34,7 @@ public class WishDaoImpl extends AbstractDao implements WishDao {
 	@Override
 	public void add(Wish wish) {
 		open();
-		ContentValues values = new ContentValues();
-		values.put(Key.CATEGORY.toString(), wish.getCategory().getId());
-		values.put(Key.TITLE.toString(), wish.getTitle());
-		values.put(Key.DESCRIPTION.toString(), wish.getDescription());
-		if(wish.getEndDate() != null) { 
-			values.put(Key.END_DATE.toString(), wish.getEndDate().getTime());
-		}
+		ContentValues values = populateWishDetails(wish);
 		// Inserting Row
 		database.insert(Table.WISHES.toString(), null, values);
 		close();
@@ -79,11 +73,22 @@ public class WishDaoImpl extends AbstractDao implements WishDao {
 	}
 
 	@Override
-	public void update(Wish object) {
+	public void update(Wish wish) {
+		String whereClause  = " id = " + wish.getId();
+		ContentValues values = populateWishDetails(wish);
+		
+		// Update row
+		open();
+		database.update(Table.WISHES.toString(), values, whereClause, null);
+		close();
 	}
 
 	@Override
 	public void delete(int id) {
+		String whereClause = " id = " + id;
+		open();
+		database.delete(Table.WISHES.toString(), whereClause, null);
+		close();
 	}
 
 	@Override
@@ -101,6 +106,21 @@ public class WishDaoImpl extends AbstractDao implements WishDao {
 		}
 		
 		return categoryWiseWishes;
+	}
+	
+	/**
+	 * Copy wish details into content values.
+	 * 
+	 * @param wish
+	 * @return ContentValues with values populated
+	 */
+	private ContentValues populateWishDetails(Wish wish) {
+		ContentValues values = new ContentValues();
+		values.put(Key.CATEGORY.toString(), wish.getCategory().getId());
+		values.put(Key.TITLE.toString(), wish.getTitle());
+		values.put(Key.DESCRIPTION.toString(), wish.getDescription());
+		values.put(Key.END_DATE.toString(), wish.getEndDate().getTime());
+		return values;
 	}
 
 }

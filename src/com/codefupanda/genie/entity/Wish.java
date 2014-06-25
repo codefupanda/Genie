@@ -3,6 +3,7 @@
  */
 package com.codefupanda.genie.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -10,7 +11,12 @@ import java.util.Date;
  * 
  * @author Shashank
  */
-public class Wish {
+public class Wish implements Serializable {
+	
+	/**
+	 * Serial version UID.
+	 */
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private Category category;
 	private String title;	// find a btr name

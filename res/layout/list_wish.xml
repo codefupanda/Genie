@@ -15,4 +15,9 @@
         style="@android:style/TextAppearance.Medium"
         android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
  
+    <TextView
+        android:id="@+id/wishId"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible" />
 </LinearLayout>

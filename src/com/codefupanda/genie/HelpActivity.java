@@ -3,6 +3,8 @@
  */
 package com.codefupanda.genie;
 
+import com.codefupanda.genie.util.AndroiUiUtil;
+
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
@@ -21,6 +23,7 @@ public class HelpActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_help);
 		
 		getSupportActionBar().setHomeButtonEnabled(true);
+		AndroiUiUtil.customActionbar(this, getSupportActionBar());
 		
 		TextView helpText = (TextView) findViewById(R.id.helpText);
 		helpText.setText(Html.fromHtml(getResources().getString(R.string.helpText)));

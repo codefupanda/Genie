@@ -61,10 +61,12 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.list_wish, null);
         }
- 
+        TextView wishIdTextView = (TextView) convertView
+                .findViewById(R.id.wishId);
+        wishIdTextView.setText(String.valueOf(wish.getId()));
+        
         TextView wishTextView = (TextView) convertView
                 .findViewById(R.id.wishTextView);
- 
         wishTextView.setText(wish.getTitle());
         return convertView;
     }
@@ -124,4 +126,32 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
     }
+
+	/**
+	 * @return the categories
+	 */
+	public List<Category> getCategories() {
+		return categories;
+	}
+
+	/**
+	 * @param categories the categories to set
+	 */
+	public void setCategories(List<Category> categories) {
+		this.categories = categories;
+	}
+
+	/**
+	 * @return the categoryWiseWishes
+	 */
+	public Map<Category, List<Wish>> getCategoryWiseWishes() {
+		return categoryWiseWishes;
+	}
+
+	/**
+	 * @param categoryWiseWishes the categoryWiseWishes to set
+	 */
+	public void setCategoryWiseWishes(Map<Category, List<Wish>> categoryWiseWishes) {
+		this.categoryWiseWishes = categoryWiseWishes;
+	}
 }

@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -22,6 +23,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.codefupanda.genie.adapter.ExpandableListAdapter;
@@ -32,6 +34,7 @@ import com.codefupanda.genie.dao.impl.CategoryDaoImpl;
 import com.codefupanda.genie.dao.impl.WishDaoImpl;
 import com.codefupanda.genie.entity.Category;
 import com.codefupanda.genie.entity.Wish;
+import com.codefupanda.genie.listener.OnSwipeTouchListener;
 import com.codefupanda.genie.util.AndroiUiUtil;
 
 /**
@@ -45,6 +48,9 @@ public class MainActivity extends ActionBarActivity {
 	private CategoryDao categoryDao;
 	private ExpandableListAdapter expandableListAdapter;
 	private ExpandableListView expandableListView;
+	
+	// animate the list?
+	private boolean animate = true;
 
 	@SuppressLint("InlinedApi")
 	@Override
@@ -73,17 +79,58 @@ public class MainActivity extends ActionBarActivity {
 			prefs.edit().putBoolean("firstrun", false).commit();
             finish();
 		}
+		
+		// on swipe listener
+		expandableListView.setOnTouchListener(new OnSwipeTouchListener(this) {
+			@Override
+			public void onSwipeRight(View view, MotionEvent e1) {
+				int pos = expandableListView.pointToPosition((int) e1.getX(),
+						(int) e1.getY());
+				View llView = expandableListView.getChildAt(pos);
+
+				// list_wish is LinearLayout, whereas list_category
+				// RelativeLayout
+				// Taking swipe to delete action only for list_wish
+
+				if (llView instanceof LinearLayout) {
+					LinearLayout ll = (LinearLayout) expandableListView
+							.getChildAt(pos);
+					TextView textView = (TextView) ll.findViewById(R.id.wishId);
+					if (textView != null) {
+						deleteWish(Integer.parseInt(textView.getText()
+								.toString()));
+					}
+				}
+				super.onSwipeRight(view, e1);
+			}
+
+			private void deleteWish(int wishId) {
+				wishDao.delete(wishId);
+				expandableListAdapter.setCategoryWiseWishes(wishDao
+						.getCategoryWiseWishes());
+				expandableListAdapter.notifyDataSetChanged();
+				AndroiUiUtil.toast(MainActivity.this,
+						R.string.delete_wish_success);
+			}
+		});
+		
 		expandableListView.setOnChildClickListener(new OnChildClickListener() {
 			
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v,
-					int groupPosition, int childPosition, long id) {
+					final int groupPosition, final int childPosition, long id) {
 				final Dialog dialog = new Dialog(MainActivity.this);
 				View view = getLayoutInflater().inflate(R.layout.description_view_dialog, null);
 				dialog.setContentView(view);
 				
 				Wish wish = expandableListAdapter.getChild(groupPosition,
 						childPosition);
+				
+				// Just a null check
+				if(wish == null) {
+					return false;
+				}
+				
 				dialog.setTitle(wish.getTitle());
 				
 				TextView description = (TextView) view.findViewById(R.id.description);
@@ -96,6 +143,18 @@ public class MainActivity extends ActionBarActivity {
 						dialog.dismiss();
 					}
 				});
+				
+				Button editButton = (Button) view.findViewById(R.id.edit);
+				editButton.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						dialog.dismiss();
+						Intent editIntent = new Intent(getBaseContext(), AddActivity.class);
+						editIntent.putExtra(Constants.EDIT_WISH, expandableListAdapter.getChild(groupPosition, childPosition));
+						startActivity(editIntent);
+					}
+				});
+				
 				dialog.show();
 				return false;
 			}
@@ -111,21 +170,26 @@ public class MainActivity extends ActionBarActivity {
 	protected void onResume() {
 		Bundle extras = getIntent().getExtras();
 		
-		if(extras != null && !extras.getBoolean(Constants.SHOW_FLASH)) {
+		if(!animate || 
+				(extras != null && !extras.getBoolean(Constants.SHOW_FLASH))) {
 			showHomeScreen();
-		} else
+		} else {
 			new Handler().postDelayed(new Runnable() {
 				public void run() {
-					View logo = findViewById(R.id.logo);
-					logo.setVisibility(View.INVISIBLE);
-					getSupportActionBar().show();
 					showHomeScreen();
 				}
 			}, Constants.WELCOME_SCREEN_LENGTH);
+			animate = false;
+		}
 		super.onResume();
 	}
 
 	private void showHomeScreen() {
+		getSupportActionBar().show();
+		
+		View logo = findViewById(R.id.logo);
+		logo.setVisibility(View.INVISIBLE);
+		
 		Map<Category, List<Wish>> categoryWiseWishes = wishDao
 				.getCategoryWiseWishes();
 		List<Category> categories = categoryDao.getAll();

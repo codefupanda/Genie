@@ -36,10 +36,10 @@ public class AndroiUiUtil {
 	 * Create method with String resource ID.
 	 * 
 	 * @param baseContext
-	 * @param createCategorySuccessful
+	 * @param stringResourceId
 	 */
-	public static void toast(Context context, int createCategorySuccessful) {
-		toast(context, context.getResources().getString(createCategorySuccessful));
+	public static void toast(Context context, int stringResourceId) {
+		toast(context, context.getResources().getString(stringResourceId));
 	}
 
 	/**

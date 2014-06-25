@@ -24,9 +24,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.codefupanda.genie.constant.Constants;
 import com.codefupanda.genie.dao.CategoryDao;
 import com.codefupanda.genie.dao.WishDao;
 import com.codefupanda.genie.dao.impl.CategoryDaoImpl;
@@ -37,6 +39,7 @@ import com.codefupanda.genie.util.AndroiUiUtil;
 import com.codefupanda.genie.util.Util;
 
 /**
+ * Activity for Add and Edit functionality.
  * 
  * @author Shashank
  */
@@ -53,6 +56,15 @@ public class AddActivity extends ActionBarActivity {
 	private Button wishButton;
 	private Animation slideUp;
 	
+	/**
+	 * For edit populated with existing wish 
+	 * and for add a new wish object is assigned.
+	 */
+	private Wish wish;
+	
+	/** Used by edit functionality. */
+	private boolean isEdit;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -65,9 +77,28 @@ public class AddActivity extends ActionBarActivity {
 		wishDao = new WishDaoImpl(getApplicationContext());
 		categoryDao = new CategoryDaoImpl(getApplicationContext());
 		endDate = Calendar.getInstance();
+
+		Bundle extras = getIntent().getExtras();
 		
+		if(extras != null && extras.getSerializable(Constants.EDIT_WISH) != null) {
+			isEdit = true;
+			wish = (Wish) extras.getSerializable(Constants.EDIT_WISH);
+		} else {
+			wish = new Wish();
+			wish.setCategory(new Category());
+		}
+		
+		// if edit, set the end date
+		if(isEdit) {
+			endDate.setTime(wish.getEndDate());
+		}
+		
+		TextView endDateView = (TextView) findViewById(R.id.end_date);
+		int year = endDate.get(Calendar.YEAR);
+		int month = endDate.get(Calendar.MONTH) + 1; // Month is 0 based, just add 1
+		int day = endDate.get(Calendar.DAY_OF_MONTH);
 		// populate date
-		setCurrentDateForEndDateView();
+		setCurrentDateForEndDateView(day, month, year, endDateView);
 
 		// populate drop down
 		categories = (Spinner) findViewById(R.id.category);
@@ -75,8 +106,21 @@ public class AddActivity extends ActionBarActivity {
 
 		title = (EditText) findViewById(R.id.title);
 		description = (EditText) findViewById(R.id.description);
-
 		wishButton = (Button) findViewById(R.id.wishButton);
+		
+		if(isEdit) {
+			categories.setSelection(wish.getCategory().getId());
+			title.setText(wish.getTitle());
+			description.setText(wish.getDescription());
+			wishButton.setText(getResources().getString(R.string.save));
+			LinearLayout ll = (LinearLayout) findViewById(R.id.container);
+			int childcount = ll.getChildCount();
+			for (int i=0; i < childcount; i++){
+			      View v = ll.getChildAt(i);
+			      v.setVisibility(View.VISIBLE);
+			}
+		}
+		
 		wishButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -93,17 +137,21 @@ public class AddActivity extends ActionBarActivity {
 					return ;
 				}
 				
-				Wish newWish = new Wish();
-				Category category = new Category();
-				category.setId(categories.getSelectedItemPosition());
-				newWish.setCategory(category);
-				newWish.setTitle(titleText);
-				newWish.setDescription(descriptionText);
-				newWish.setEndDate(endDate.getTime());
-				wishDao.add(newWish);
-				AndroiUiUtil
-						.toast(getApplicationContext(), getResources()
-								.getString(R.string.add_wish_success));
+				wish.getCategory().setId(categories.getSelectedItemPosition());
+				wish.setTitle(titleText);
+				wish.setDescription(descriptionText);
+				wish.setEndDate(endDate.getTime());
+				
+				int toastMessage = R.string.add_wish_success;
+				
+				if (isEdit) {
+					toastMessage = R.string.update_wish_success;
+					wishDao.update(wish);
+				} else {
+					wishDao.add(wish);
+				}
+				AndroiUiUtil.toast(getApplicationContext(), getResources()
+						.getString(toastMessage));
 				finish();
 			}
 		});
@@ -120,32 +168,37 @@ public class AddActivity extends ActionBarActivity {
 		// setting a blank select option
 		// and rejecting the value if blank is selected
 		list.add(0, "");
-		
+
 		// Option to add a new category
-		list.add(list.size(), getResources().getString(R.string.add_new_category));
-		
+		if (!isEdit) {
+			list.add(list.size(),
+					getResources().getString(R.string.add_new_category));
+		}
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, list);
 		dataAdapter
-			.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		categories.setAdapter(dataAdapter);
-		
+
+		// Do not animate on selection for edit feature.
+		if (!isEdit)
 		categories.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View view,
 					int position, long arg3) {
 				// A unknown issue!
-				if(position == 0) {
+				if (position == 0) {
 					return;
 				}
-				
+
 				// New category selected
-				if(position == list.size() - 1) {
+				if (position == list.size() - 1) {
 					final Dialog dialog = new Dialog(AddActivity.this);
-					View newCategoryView = getLayoutInflater().inflate(R.layout.new_category_dialog, null);
+					View newCategoryView = getLayoutInflater().inflate(
+							R.layout.new_category_dialog, null);
 					dialog.setContentView(newCategoryView);
-					
+
 					Button cancel = (Button) newCategoryView
 							.findViewById(R.id.cancel);
 					cancel.setOnClickListener(new OnClickListener() {
@@ -154,10 +207,12 @@ public class AddActivity extends ActionBarActivity {
 							dialog.dismiss();
 						}
 					});
-					
-					final EditText categoryEditText = (EditText) newCategoryView.findViewById(R.id.categoryName);
-					final EditText whWordEditText = (EditText) newCategoryView.findViewById(R.id.whWord);
-					
+
+					final EditText categoryEditText = (EditText) newCategoryView
+							.findViewById(R.id.categoryName);
+					final EditText whWordEditText = (EditText) newCategoryView
+							.findViewById(R.id.whWord);
+
 					Button create = (Button) newCategoryView
 							.findViewById(R.id.create);
 					create.setOnClickListener(new OnClickListener() {
@@ -165,9 +220,8 @@ public class AddActivity extends ActionBarActivity {
 						public void onClick(View v) {
 							String categoryName = categoryEditText.getText()
 									.toString();
-							String whWord = whWordEditText.getText()
-									.toString();
-							if(!Util.isBlank(categoryName)
+							String whWord = whWordEditText.getText().toString();
+							if (!Util.isBlank(categoryName)
 									&& !Util.isBlank(whWord)) {
 								Category category = new Category();
 								category.setName(categoryName);
@@ -178,38 +232,39 @@ public class AddActivity extends ActionBarActivity {
 										R.string.create_category_successful);
 								dialog.dismiss();
 							}
-							
+
 						}
 					});
 					dialog.setTitle(getResources().getString(
 							R.string.action_new));
 					dialog.show();
-					return ;
+					return;
 				}
-				
+
 				TextView textView = (TextView) findViewById(R.id.title_text);
-				Category category = categoryDao.get(categories.getSelectedItemPosition());
+				Category category = categoryDao.get(categories
+						.getSelectedItemPosition());
 				// Though not expecting a null here!
-				if(category != null) {
+				if (category != null) {
 					textView.setText(category.getWhWord());
 				}
-				
+
 				// Slide up the title
 				makeVisibleWithAnimation(textView);
 				makeVisibleWithAnimation(title);
-				
-				// slide up description 
+
+				// slide up description
 				textView = (TextView) findViewById(R.id.description_text);
 				makeVisibleWithAnimation(textView);
 				makeVisibleWithAnimation(description);
-				
+
 				// slide up remaining things
 				textView = (TextView) findViewById(R.id.end_date_text);
 				makeVisibleWithAnimation(textView);
-				
+
 				textView = (TextView) findViewById(R.id.end_date);
 				makeVisibleWithAnimation(textView);
-				
+
 				makeVisibleWithAnimation(wishButton);
 			}
 
@@ -221,18 +276,17 @@ public class AddActivity extends ActionBarActivity {
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
 			}
-			
+
 		});
 	}
 
-	/** display current date */
-	private void setCurrentDateForEndDateView() {
-		TextView endDate = (TextView) findViewById(R.id.end_date);
-		final Calendar c = Calendar.getInstance();
-		int year = c.get(Calendar.YEAR);
-		int month = c.get(Calendar.MONTH) + 1; // Month is 0 based, just add 1
-		int day = c.get(Calendar.DAY_OF_MONTH);
-
+	/**
+	 * display current date
+	 * 
+	 * @param day
+	 */
+	private void setCurrentDateForEndDateView(int day, int month, int year,
+			TextView endDate) {
 		// set current date into textview
 		endDate.setText(new StringBuilder().append(month).append("-")
 				.append(day).append("-").append(year).append(" "));
@@ -249,11 +303,11 @@ public class AddActivity extends ActionBarActivity {
 
 	class DatePickerFragment extends DialogFragment implements
 			DatePickerDialog.OnDateSetListener {
-
+		
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
-			// Use the current date as the default date in the picker
-			final Calendar c = Calendar.getInstance();
+			// Use the end date as the default date in the picker
+			final Calendar c = endDate;
 			int year = c.get(Calendar.YEAR);
 			int month = c.get(Calendar.MONTH);
 			int day = c.get(Calendar.DAY_OF_MONTH);
@@ -269,8 +323,8 @@ public class AddActivity extends ActionBarActivity {
 			endDate.set(Calendar.DAY_OF_MONTH, day);
 			TextView endDateView = (TextView) findViewById(R.id.end_date);
 			endDateView.setText(new StringBuilder().append(month + 1)
-					   .append("-").append(day).append("-").append(year)
-					   .append(" "));
+					.append("-").append(day).append("-").append(year)
+					.append(" "));
 		}
 	}
 }
