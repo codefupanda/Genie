@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.codefupanda.genie"
     android:versionCode="1"
-    android:versionName="0.1-beta" >
+    android:versionName="1.0-beta" >
 
     <uses-sdk
         android:minSdkVersion="9"
@@ -26,11 +26,6 @@
         <activity
             android:name="com.codefupanda.genie.AddActivity"
             android:label="@string/what_can_i_do_for_you" >
-        </activity>
-        
-        <activity
-            android:name="com.codefupanda.genie.SettingsActivity"
-            android:label="@string/action_settings" >
         </activity>
         
  		<activity

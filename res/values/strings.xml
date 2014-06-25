@@ -23,7 +23,6 @@
     <string name="delete_wish_success">Deleted Wish!</string>
     <string name="delete">Delete</string>
     <string name="are_u_sure_delete">Delete?</string>
-    
     <string name="add_new_category">New Category</string>
     <string name="create">Create</string>
     <string name="create_category_successful">Created category</string>
@@ -35,15 +34,25 @@
     <string name="genie_intro">        Genie records your wishes.\n
         \tWishes do come true!</string>
     <string name="helpText">
-	<![CDATA[
-        The first step in realizing your dreams is to record them.<br/>
-        <b>Genie</b> helps you record your wishes!<br/>
-        <br/>
-        Genie let\'s you categories your wishes.<br/>
-        Either select from the defualt categories or create your own category.<br/>
-        <br/>
-        Make a <b>Wish</b>!<br/>
-        <br/>]]>
+		<![CDATA[
+		        The first step in realizing your dreams is to record all your wishes.<br/>
+		<b>Genie</b> does exactly that!<br/>
+		<br/>
+		Genie let\'s you categories your wishes.<br/>
+		Either select from the defualt categories or create your own.<br/>
+		<br/>
+		
+		A very simple and easy to use UI with following features: 
+		<ol>
+		<li>Add new wish with category, description and deadline.</li>
+		<li>Pre-created categories to choose from.</li>
+		<li>Create new Category.</li>
+		<li>Edit wishes.</li>
+		<li>Swipe right to delete wishes.</li>
+		</ol>
+		
+		Make a <b>Wish</b> and Genie will fulfill them all!<br/>
+		<br/>]]>
     </string>
 
 </resources>

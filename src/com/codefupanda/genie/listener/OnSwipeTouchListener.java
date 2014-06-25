@@ -36,12 +36,13 @@ public class OnSwipeTouchListener implements OnTouchListener {
 
 		@Override
 		public boolean onDown(MotionEvent e) {
-			return true;
+			return false;
 		}
 
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
+			boolean result = false;
 			float diffY = e2.getY() - e1.getY();
 			float diffX = e2.getX() - e1.getX();
 
@@ -49,42 +50,50 @@ public class OnSwipeTouchListener implements OnTouchListener {
 				if (Math.abs(diffX) > Constants.SWIPE_THRESHOLD
 						&& Math.abs(velocityX) > Constants.SWIPE_VELOCITY_THRESHOLD) {
 					if (diffX > 0) {
-						onSwipeRight(view, e1);
+						result = onSwipeRight(view, e1, e2);
 					} else {
-						onSwipeLeft(view);
+						result = onSwipeLeft(view, e1, e2);
 					}
 				}
 			} else {
 				if (Math.abs(diffY) > Constants.SWIPE_THRESHOLD
 						&& Math.abs(velocityY) > Constants.SWIPE_VELOCITY_THRESHOLD) {
 					if (diffY > 0) {
-						onSwipeDown(view);
+						result = onSwipeDown(view, e1, e2);
 					} else {
-						onSwipeUp(view);
+						result = onSwipeUp(view, e1, e2);
 					}
 				}
 			}
-			return false;
+			return result;
 		}
 	}
 
 	/**
 	 * Override this function for right swipe.
 	 */
-	public void onSwipeRight(View view, MotionEvent e1) {}
+	public boolean onSwipeRight(View view, MotionEvent e1, MotionEvent e2) {
+		return false;
+	}
 
 	/**
 	 * Override this function for left swipe.
 	 */
-	public void onSwipeLeft(View view) {}
+	public boolean onSwipeLeft(View view, MotionEvent e1, MotionEvent e2) {
+		return false;
+	}
 
 	/**
 	 * Override this function for up swipe.
 	 */
-	public void onSwipeUp(View view) {}
+	public boolean onSwipeUp(View view, MotionEvent e1, MotionEvent e2) {
+		return false;
+	}
 
 	/**
 	 * Override this function for down swipe.
 	 */
-	public void onSwipeDown(View view) {}
+	public boolean onSwipeDown(View view, MotionEvent e1, MotionEvent e2) {
+		return false;
+	}
 }

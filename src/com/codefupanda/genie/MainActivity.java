@@ -87,7 +87,7 @@ public class MainActivity extends ActionBarActivity {
 		// on swipe listener
 		expandableListView.setOnTouchListener(new OnSwipeTouchListener(this) {
 			@Override
-			public void onSwipeRight(View view, MotionEvent e1) {
+			public boolean onSwipeRight(View view, MotionEvent e1, MotionEvent e2) {
 				int pos = expandableListView.pointToPosition((int) e1.getX(),
 						(int) e1.getY());
 				View llView = expandableListView.getChildAt(pos);
@@ -105,13 +105,15 @@ public class MainActivity extends ActionBarActivity {
 								.toString()));
 					}
 				}
-				super.onSwipeRight(view, e1);
+				// true because we have consumed this event
+				return true;
 			}
 
 			private void areYouSure(final int wishId) {
 				final Dialog dialog = new Dialog(MainActivity.this);
 				View view = getLayoutInflater().inflate(R.layout.wish_delete_dialog, null);
 				dialog.setContentView(view);
+				dialog.setTitle(R.string.delete);
 				
 				Button okButton = (Button) view.findViewById(R.id.ok);
 				okButton.setOnClickListener(new OnClickListener() {
@@ -149,6 +151,7 @@ public class MainActivity extends ActionBarActivity {
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v,
 					final int groupPosition, final int childPosition, long id) {
+				
 				final Dialog dialog = new Dialog(MainActivity.this);
 				View view = getLayoutInflater().inflate(R.layout.description_view_dialog, null);
 				dialog.setContentView(view);
@@ -195,7 +198,7 @@ public class MainActivity extends ActionBarActivity {
 				});
 				
 				dialog.show();
-				return false;
+				return true;
 			}
 		});
 	}
@@ -257,13 +260,6 @@ public class MainActivity extends ActionBarActivity {
 			case R.id.action_new:
 				startActivity(new Intent(getApplicationContext(), AddActivity.class));
 				return true;
-			// open settings activity
-				/*
-	        case R.id.action_settings:
-	        	startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-	            return true;
-	           	*/
-	         // open help activity
 	        case R.id.action_help:
 	        	startActivity(new Intent(getApplicationContext(), HelpActivity.class));
 	            return true;
