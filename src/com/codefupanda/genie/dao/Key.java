@@ -10,12 +10,13 @@ package com.codefupanda.genie.dao;
  */
 public enum Key {
 	CATEGORY ("category"),
+	COMPLETION ("completion"),
 	DESCRIPTION ("description"),
 	END_DATE ("end_date"), 
 	ID ("id"),
-	NAME("name"),
 	TITLE ("title"),
 	USER_CREATED ("user_created"),
+	WISH("wish"),
 	WT_WORD ("wh_word");
 	
 	private String name;

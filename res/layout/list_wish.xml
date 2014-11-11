@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="55dip"
-    android:orientation="vertical"
-    style="@android:style/TextAppearance.Medium" >
+    android:orientation="vertical">
  
     <TextView
         android:id="@+id/wishTextView"
@@ -11,13 +10,29 @@
         android:layout_height="wrap_content"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
-        android:textSize="15sp"
-        style="@android:style/TextAppearance.Medium"
         android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
- 
+    
+    <ImageView
+        android:id="@+id/divider"
+        android:layout_width="fill_parent"
+        android:layout_height="0.01sp"
+        android:background="@android:color/background_light"
+        android:layout_alignParentBottom="true"
+        android:contentDescription="@string/divider" />
+    
+    <TextView
+        android:id="@+id/tasks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="25dp"
+        android:background="@drawable/list"
+        android:textStyle="bold" />
+    
     <TextView
         android:id="@+id/wishId"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="invisible" />
-</LinearLayout>
+</RelativeLayout>

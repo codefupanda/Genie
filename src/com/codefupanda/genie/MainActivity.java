@@ -24,7 +24,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.codefupanda.genie.adapter.ExpandableListAdapter;
@@ -96,8 +96,8 @@ public class MainActivity extends ActionBarActivity {
 				// RelativeLayout
 				// Taking swipe to delete action only for list_wish
 
-				if (llView instanceof LinearLayout) {
-					LinearLayout ll = (LinearLayout) expandableListView
+				if (llView instanceof RelativeLayout) {
+					RelativeLayout ll = (RelativeLayout) expandableListView
 							.getChildAt(pos);
 					TextView textView = (TextView) ll.findViewById(R.id.wishId);
 					if (textView != null) {

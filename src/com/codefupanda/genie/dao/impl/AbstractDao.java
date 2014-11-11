@@ -32,10 +32,17 @@ public abstract class AbstractDao {
 	/**
 	 * open database
 	 */
-	protected void open() {
+	protected void openForWrite() {
 		database = baseDao.getWritableDatabase();
 	}
 
+	/**
+	 * open database
+	 */
+	protected void openForRead() {
+		database = baseDao.getReadableDatabase();
+	}
+	
 	/**
 	 * Close database.
 	 */

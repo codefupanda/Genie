@@ -1,7 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
-    style="@android:style/TextAppearance.Medium"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.codefupanda.genie.MainActivity"
@@ -20,7 +19,9 @@
         android:id="@+id/expandableCategories"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:groupIndicator="@android:color/transparent"
+        android:paddingTop="10dp"
+        android:dividerHeight="0.01sp"
+        android:divider="@android:color/transparent"
         android:visibility="invisible" />
 
 </RelativeLayout>

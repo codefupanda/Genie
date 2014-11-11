@@ -33,10 +33,10 @@ public class WishDaoImpl extends AbstractDao implements WishDao {
 
 	@Override
 	public void add(Wish wish) {
-		open();
+		openForWrite();
 		ContentValues values = populateWishDetails(wish);
 		// Inserting Row
-		database.insert(Table.WISHES.toString(), null, values);
+		database.insert(Table.WISH.toString(), null, values);
 		close();
 	}
 
@@ -48,9 +48,9 @@ public class WishDaoImpl extends AbstractDao implements WishDao {
 	@Override
 	public List<Wish> getAll() {
 		List<Wish> wishes = new LinkedList<Wish>();
-		String selectQuery = "SELECT  * FROM " + Table.WISHES;
+		String selectQuery = "SELECT  * FROM " + Table.WISH;
 
-		open();
+		openForRead();
 		Cursor cursor = database.rawQuery(selectQuery, null);
 		
 		// looping through all rows and adding to list
@@ -78,16 +78,16 @@ public class WishDaoImpl extends AbstractDao implements WishDao {
 		ContentValues values = populateWishDetails(wish);
 		
 		// Update row
-		open();
-		database.update(Table.WISHES.toString(), values, whereClause, null);
+		openForWrite();
+		database.update(Table.WISH.toString(), values, whereClause, null);
 		close();
 	}
 
 	@Override
 	public void delete(int id) {
 		String whereClause = " id = " + id;
-		open();
-		database.delete(Table.WISHES.toString(), whereClause, null);
+		openForWrite();
+		database.delete(Table.WISH.toString(), whereClause, null);
 		close();
 	}
 

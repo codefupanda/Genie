@@ -15,7 +15,6 @@
             android:maxLines="100"
             android:padding="15dp"
             android:scrollbars="vertical"
-            android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="#000000" />
         
 </ScrollView>

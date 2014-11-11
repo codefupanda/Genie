@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,8 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import com.codefupanda.genie.R;
+import com.codefupanda.genie.TasksActivity;
+import com.codefupanda.genie.constant.Constants;
 import com.codefupanda.genie.entity.Category;
 import com.codefupanda.genie.entity.Wish;
 
@@ -64,10 +67,25 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         TextView wishIdTextView = (TextView) convertView
                 .findViewById(R.id.wishId);
         wishIdTextView.setText(String.valueOf(wish.getId()));
-        
+
         TextView wishTextView = (TextView) convertView
                 .findViewById(R.id.wishTextView);
         wishTextView.setText(wish.getTitle());
+
+        // On click of tasks icon, redirect to TasksActivity
+        TextView tasksTextView = (TextView) convertView
+        		.findViewById(R.id.tasks);
+        tasksTextView.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View tasksView) {
+				Intent intent = new Intent(context, TasksActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				intent.putExtra(Constants.WISH_ID, wish.getId());
+				context.startActivity(intent);
+			}
+		});
+
         return convertView;
     }
  

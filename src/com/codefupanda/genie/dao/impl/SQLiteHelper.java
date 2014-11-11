@@ -24,7 +24,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
  
     /** Create Wishes table. */
     private static final String CREATE_WISHES_TABLE = 
-    		"Create table " + Table.WISHES + " ( " + 
+    		"Create table " + Table.WISH + " ( " + 
     		Key.ID  + " INTEGER PRIMARY KEY, " + 
     		Key.CATEGORY  + " INTEGER, " + 
     		Key.TITLE  + " TEXT, " + 
@@ -36,11 +36,21 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 	private static final String CREATE_CATEGORY_TABLE = 
 			"CREATE TABLE " + Table.CATEGORY + "( " +
 			Key.ID + " INTEGER PRIMARY KEY, " +
-			Key.NAME + " TEXT, " +
+			Key.TITLE + " TEXT, " +
 			Key.WT_WORD + " TEXT, " +
 			Key.USER_CREATED + " INTEGER default 0 " +
 			")";
-
+	
+	private static final String CREATE_TASK_TABLE = 
+			"CREATE TABLE " + Table.TASK + "( " +
+			Key.ID + " INTEGER PRIMARY KEY, " +
+			Key.WISH + " INTEGER, " +
+			Key.TITLE + " TEXT, " +
+			Key.DESCRIPTION  + " TEXT, " + 
+    		Key.COMPLETION  + " INTEGER, " +
+    		"FOREIGN KEY(" + Key.WISH + ") REFERENCES " + Table.WISH + " ( " + Key.ID + " ) " +
+    		")";
+	
 	/**
 	 * Constructor. 
 	 * @param context
@@ -56,15 +66,17 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase database) {
     	database.execSQL(CREATE_CATEGORY_TABLE);
         database.execSQL(CREATE_WISHES_TABLE);
+        database.execSQL(CREATE_TASK_TABLE);
     }
  
     // Upgrading database
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
-        db.execSQL("DROP TABLE IF EXISTS " + Table.WISHES);
+    	db.execSQL("DROP TABLE IF EXISTS " + Table.TASK);
+        db.execSQL("DROP TABLE IF EXISTS " + Table.WISH);
         db.execSQL("DROP TABLE IF EXISTS " + Table.CATEGORY);
-        
+
         // Create tables again
         onCreate(db);
     }

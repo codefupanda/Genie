@@ -28,9 +28,9 @@ public class CategoryDaoImpl extends AbstractDao implements CategoryDao {
 
 	@Override
 	public void add(Category category) {
-		open();
+		openForWrite();
 		ContentValues values = new ContentValues();
-		values.put(Key.NAME.toString(), category.getName().toUpperCase(Locale.US));
+		values.put(Key.TITLE.toString(), category.getName().toUpperCase(Locale.US));
 		values.put(Key.WT_WORD.toString(), category.getWhWord());
 		values.put(Key.USER_CREATED.toString(), category.isUserCreated());
 		
@@ -64,7 +64,7 @@ public class CategoryDaoImpl extends AbstractDao implements CategoryDao {
 	 */
 	private List<Category> queryForCategories(String query) {
 		List<Category> categories = new LinkedList<Category>();
-		open();
+		openForRead();
 		Cursor cursor = database.rawQuery(query, null);
 		
 		// looping through all rows and adding to list
@@ -96,7 +96,7 @@ public class CategoryDaoImpl extends AbstractDao implements CategoryDao {
 		List<String> categories = new LinkedList<String>();
 		String selectQuery = SELECT_STAR_FROM + Table.CATEGORY;
 
-		open();
+		openForWrite();
 		
 		Cursor cursor = database.rawQuery(selectQuery, null);
 		// looping through all rows and adding to list

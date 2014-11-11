@@ -18,6 +18,11 @@ import com.codefupanda.genie.R;
 public class AndroiUiUtil {
 
 	/**
+	 * Private constructor.
+	 */
+	private AndroiUiUtil() {
+	}
+	/**
 	 * Toast info.
 	 * 
 	 * @param context context

@@ -19,6 +19,9 @@ public class Constants {
 	/** Used by Edit and Main activities to exchange data in between them. */
 	public static final String EDIT_WISH = "editWish";
 	
+	/** Used by Tasks and Main activities to exchange data in between them. */
+	public static final String WISH_ID = "wishId";
+
 	/** Used by OnSwipeTouchListener. */
 	public static final int SWIPE_THRESHOLD = 100;
 	

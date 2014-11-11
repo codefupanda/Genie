@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="9"
-        android:targetSdkVersion="19" />
+        android:targetSdkVersion="20" />
 
     <application
         android:allowBackup="true"
@@ -36,6 +36,11 @@
  		<activity
             android:name="com.codefupanda.genie.HelpActivity"
             android:label="@string/action_help">
+        </activity>
+        
+ 		<activity 
+ 		    android:name="com.codefupanda.genie.TasksActivity"
+ 		    android:label="@string/tasks">
         </activity>
     </application>
 

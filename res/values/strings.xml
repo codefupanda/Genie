@@ -8,6 +8,7 @@
     <string name="action_new">New</string>
     <string name="action_edit">Edit</string>
     <string name="save">Save</string>
+    <string name="update">Update</string>
 
     <!-- Add screen strings -->
     <string name="category_text">I Wish To </string>
@@ -17,7 +18,19 @@
     <string name="end_date_text">Accomplish By</string>
     <string name="fields_mendatory">All fields are mandatory</string>
 
-    <!-- Few messages -->
+    <!-- Main screen strings -->
+    <string name="divider">divider</string>
+    
+    <!-- Tasks screen strings -->
+    <string name="tasks">Tasks</string>
+    <string name="task">Task</string>
+    <string name="taskNotes_hint">Notes for task</string>
+    <string name="add_task_success">Added a new Task!</string>
+    <string name="update_task_success">Updated Task!</string>
+    <string name="delete_task_success">Deleted Task!</string>
+    <string name="completion">Completion</string>
+
+    <!-- Add wish string -->
     <string name="add_wish_success">Added a new Wish!</string>
     <string name="update_wish_success">Updated Wish!</string>
     <string name="delete_wish_success">Deleted Wish!</string>
@@ -36,21 +49,21 @@
     <string name="helpText">
 		<![CDATA[
 		        The first step in realizing your dreams is to record all your wishes.<br/>
-		<b>Genie</b> does exactly that!<br/>
-		<br/>
+		<b>Genie</b> helps you do that!<br/><br/>
+		
 		Genie let\'s you categories your wishes.<br/>
 		Either select from the defualt categories or create your own.<br/>
 		<br/>
 		
-		A very simple and easy to use UI with following features: 
-		<ol>
-		<li>Add new wish with category, description and deadline.</li>
-		<li>Pre-created categories to choose from.</li>
-		<li>Create new Category.</li>
-		<li>Edit wishes.</li>
-		<li>Swipe right to delete wishes.</li>
-		</ol>
-		
+		A very simple and easy to use UI with following features:<br/> 
+		<br/>
+		\t1) Add/update wish with category, description and deadline<br/>
+		\t2) Pre-created categories to choose from<br/>
+		\t3) Create new Category<br/>
+		\t4) Swipe right to delete<br/>
+		\t5) Add Tasks to wish<br/>
+		\t6) Track task completion<br/>
+		<br/><br/>
 		Make a <b>Wish</b> and Genie will fulfill them all!<br/>
 		<br/>]]>
     </string>

@@ -7,29 +7,37 @@
     android:padding="12dp" >
 
     <TextView
-        android:id="@+id/description"
+        android:id="@+id/notes"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="5dp"
-        android:typeface="serif" />
+        android:paddingLeft="5dp" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp" >
 
         <TextView
-            android:id="@+id/end_date_text"
+            android:id="@+id/completion_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/completion" />
+        
+        <TextView
+            android:id="@+id/completion_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:text="@string/end_date_text" />
-
-        <TextView
-            android:id="@+id/end_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="@string/end_date_text" />
+            android:text="@string/completion" />
+
+        <SeekBar
+            android:id="@+id/completion_seekbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/completion_text"
+            android:layout_marginTop="8dp" />
+
     </RelativeLayout>
 
     <LinearLayout
